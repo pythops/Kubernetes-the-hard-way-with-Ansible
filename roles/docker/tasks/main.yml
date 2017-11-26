@@ -1,0 +1,42 @@
+---
+
+- name: Install prerequisites packages
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: present
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - python-pip
+    - software-properties-common
+
+- name: Add Docker key
+  apt_key:
+    url: "{{ docker_key }}"
+    state: present
+
+- name: Add Docker repository
+  apt_repository:
+    repo: "{{ docker_repo }}"
+    state: present
+
+- name: Install Docker
+  apt:
+    name: docker-ce
+    update_cache: yes
+    state: present
+
+- name: copy systemd unit file
+  template:
+    src: "lib/systemd/system/docker.service.j2"
+    dest: "/lib/systemd/system/docker.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart docker
+  tags: 
+    - config
+
+- meta: flush_handlers

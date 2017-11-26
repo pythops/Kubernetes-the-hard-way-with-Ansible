@@ -1,0 +1,41 @@
+---
+
+- name: Copy etcd binaries 
+  copy:
+    src: ../../bin/etcd
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0554
+
+- name: Create config directory
+  file:
+    path: /etc/etcd
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy certificates and keys    
+  copy:
+    src: "{{ item }}"
+    dest: /etc/etcd
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - ../../pki/ca.pem
+    - ../../pki/k8s-master-key.pem
+    - ../../pki/k8s-master.pem
+
+- name: Copy systemd unit file
+  template:
+    src: "lib/systemd/system/etcd.service.j2"
+    dest: "/lib/systemd/system/etcd.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart etcd
+  tags:
+    - config

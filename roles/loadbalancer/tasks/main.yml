@@ -1,0 +1,40 @@
+---
+
+- name: Install nginx
+  apt:
+    name: nginx
+    state: present
+
+- name: Configure nginx
+  blockinfile:
+    path: /etc/nginx/nginx.conf
+    block: |
+      stream {
+          upstream k8s-api {
+                server 10.0.0.101:6443;
+                server 10.0.0.102:6443;
+                server 10.0.0.103:6443;
+          }
+          upstream etcd {
+                server 10.0.0.101:2379;
+                server 10.0.0.102:2379;
+                server 10.0.0.103:2379;
+          }	
+
+          server {
+                listen 443;
+                proxy_pass k8s-api;
+          }
+
+          server {
+                listen 6443;
+                proxy_pass k8s-api;
+          }
+
+          server {
+                listen 2379;
+                proxy_pass etcd;
+          }
+      }
+  notify:
+    - reload nginx

@@ -1,0 +1,34 @@
+---
+
+- name: Generate Certificates and config files
+  hosts: localhost
+  roles:
+    - prerequisites
+
+- name: Deploy Etcd cluster
+  hosts: k8s-masters
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - etcd
+
+- name: Deploy k8s master components
+  hosts: k8s-masters
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - k8s-master
+
+- name: Deploy loadbalancer
+  hosts: loadbalancer
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - loadbalancer
+
+- name: Deploy k8s worker components
+  hosts: k8s-workers
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - k8s-worker

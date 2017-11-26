@@ -1,0 +1,11 @@
+ETCD_NET_CONFIG: |
+  {% raw %}
+  {
+    "Network": "10.200.0.0/16", 
+    "SubnetLen": 24, 
+    "Backend": {
+       "Type": "vxlan", 
+       "VNI": 1
+    }
+  }
+  {% endraw %}

@@ -1,0 +1,51 @@
+---
+
+- name: Generate pki certificates
+  shell: "./cfssl.sh"
+  args:
+    chdir: scripts
+
+- name: Generate kubeconfig files
+  shell: "./kubectl_conf.sh"
+  args:
+    chdir: scripts
+
+- name: Create bin directory
+  file:
+    path: bin
+    state: directory
+
+- name: Download binaries
+  get_url:
+    url: "{{ item }}"
+    dest: bin/
+    mode: 0664
+  with_items:
+    - https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kube-apiserver
+    - https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kube-controller-manager
+    - https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kube-scheduler
+    - https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kubelet
+    - https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kube-proxy
+    - https://storage.googleapis.com/kubernetes-release/release/v1.8.0/bin/linux/amd64/kube-scheduler
+    - https://github.com/coreos/flannel/releases/download/v0.9.1/flannel-v0.9.1-linux-amd64.tar.gz
+    - https://github.com/coreos/etcd/releases/download/v3.2.10/etcd-v3.2.10-linux-amd64.tar.gz
+
+- name: Extract Flannel archive
+  unarchive:
+    src: bin/flannel-v0.9.1-linux-amd64.tar.gz
+    dest: "{{ playbook_dir }}/bin/"
+    exclude: 
+      - mk-docker-opts.sh
+      - README.md
+    mode: 0554
+
+- name: Extract Etcd archive
+  unarchive:
+    src: bin/etcd-v3.2.10-linux-amd64.tar.gz
+    dest: "{{ playbook_dir }}/bin/"
+    exclude: 
+      - Documentation
+      - README-etcdctl.md  
+      - README.md  
+      - READMEv2-etcdctl.md
+    extra_opts: "--strip-components=1"

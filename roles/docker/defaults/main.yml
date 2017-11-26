@@ -1,0 +1,2 @@
+docker_key: "https://download.docker.com/linux/ubuntu/gpg"
+docker_repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu xenial stable"

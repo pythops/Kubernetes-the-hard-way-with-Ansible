@@ -1,0 +1,51 @@
+---
+
+- name: Copy binaries
+  copy:
+    src: "{{ item }}"
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0554
+  with_items:
+    - ../../bin/kube-apiserver
+    - ../../bin/kube-controller-manager
+    - ../../bin/kube-scheduler
+
+- name: Create config directory
+  file:
+    path: /var/lib/kubernetes
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy certificates and keys
+  copy:
+    src: "{{ item }}"
+    dest: /var/lib/kubernetes/
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - ../../pki/ca.pem
+    - ../../pki/ca-key.pem
+    - ../../pki/k8s-master.pem
+    - ../../pki/k8s-master-key.pem
+    - ../../pki/encryption-config.yml
+
+- name: Copy systemd unit file
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: 
+    - { src: "lib/systemd/system/kube-apiserver.service.j2"          , dest: "/lib/systemd/system/kube-apiserver.service" }
+    - { src: "lib/systemd/system/kube-controller-manager.service.j2" , dest: "/lib/systemd/system/kube-controller-manager.service" }
+    - { src: "lib/systemd/system/kube-scheduler.service.j2"          , dest: "/lib/systemd/system/kube-scheduler.service" }
+  notify:
+    - restart k8s-master
+  tags:
+    - config

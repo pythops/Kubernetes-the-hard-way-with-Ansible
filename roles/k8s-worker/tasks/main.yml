@@ -1,0 +1,64 @@
+---
+
+- name: Create config directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - /var/lib/kubelet
+    - /var/lib/kubernetes
+    - /var/lib/kube-proxy
+
+- name: Copy binaries
+  copy:
+    src: "{{ item }}"
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0554
+  with_items:
+    - ../../bin/kubelet
+    - ../../bin/kube-proxy
+
+- name: Copy certificates and config files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items:
+    - { src: "../../pki/{{ ansible_hostname }}.pem"         , dest: "/var/lib/kubelet/" }
+    - { src: "../../pki/{{ ansible_hostname }}-key.pem"     , dest: "/var/lib/kubelet/" }
+    - { src: "../../conf/{{ ansible_hostname }}.kubeconfig" , dest: "/var/lib/kubelet/" }
+    - { src: "../../pki/ca.pem"                             , dest: "/var/lib/kubernetes/" }
+    - { src: "../../conf/kube-proxy.kubeconfig"             , dest: "/var/lib/kube-proxy/kubeconfig"}
+
+- name: Include docker role
+  include_role:
+    name: docker
+
+- name: Copy config file for kubelet
+  template:
+    src: "lib/systemd/system/kubelet.service.j2"
+    dest: "/lib/systemd/system/kubelet.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart kubelet
+  tags:
+    - config
+
+- name: Copy config file for kube-proxy
+  template:
+    src: "lib/systemd/system/kube-proxy.service.j2"
+    dest: "/lib/systemd/system/kube-proxy.service"
+    owner: root
+    group: root
+    mode: 0664
+  notify:
+    - restart kube-proxy

@@ -1,0 +1,50 @@
+---
+
+- name: Copy flannel and etcdctl binaries
+  copy:
+    src: "{{ item }}"
+    dest: "/usr/local/bin/"
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - ../../bin/flanneld
+    - ../../bin/etcdctl
+
+- name: Create flannel config dir
+  file:
+    path: /etc/flannel
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy etcd flannel config file
+  template:
+    src: "etc/flannel/config"
+    dest: "/etc/flannel/config"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Set network configuration on Etcd
+  shell: "etcdctl --endpoints https://10.0.0.100:2379 --ca-file /var/lib/kubernetes/ca.pem --cert-file /var/lib/kubelet/{{ ansible_hostname }}.pem --key-file /var/lib/kubelet/{{ ansible_hostname }}-key.pem mkdir /kubernetes-cluster/network"
+  register: etcd_mkdir
+  failed_when: "'Key already exists' | regex_search('(etcd_mkdir.stderr)') "
+  run_once: true
+
+- name: Set the configuration
+  shell: 'etcdctl --endpoints https://10.0.0.100:2379 --ca-file /var/lib/kubernetes/ca.pem --cert-file /var/lib/kubelet/{{ ansible_hostname }}.pem --key-file /var/lib/kubelet/{{ ansible_hostname }}-key.pem set /kubernetes-cluster/network/config < /etc/flannel/config '
+  run_once: true
+
+- name: Copy flannel systemd unit file
+  template:
+    src: "lib/systemd/system/flannel.service.j2"
+    dest: "/lib/systemd/system/flannel.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart flannel
+
+- meta: flush_handlers

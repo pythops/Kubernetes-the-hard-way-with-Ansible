@@ -1,0 +1,8 @@
+---
+
+- name: restart flannel
+  systemd:
+    daemon_reload: yes
+    enabled: yes
+    name: flannel
+    state: restarted
