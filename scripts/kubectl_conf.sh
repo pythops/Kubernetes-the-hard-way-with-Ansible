@@ -22,8 +22,6 @@ kubectl config set-context kubernetes \
 kubectl config use-context kubernetes
 fi
 
-exit 0
-
 if [[ ! -d $CONF_DIR ]] && [[ ! -f $CONF_DIR/k8s-worker1.kubeconfig ]] && [[ ! -f $CONF_DIR/k8s-worker2.kubeconfig ]] && [[ ! -f $CONF_DIR/k8s-worker3.kubeconfig ]]
 then
 echo "Generating the configuration for workers"
