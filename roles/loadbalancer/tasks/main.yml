@@ -11,14 +11,14 @@
     block: |
       stream {
           upstream k8s-api {
-                server 10.0.0.101:6443;
-                server 10.0.0.102:6443;
-                server 10.0.0.103:6443;
+          {% for host in groups['k8s-masters'] %}
+            server {{ host }}:6443;
+          {% endfor %}
           }
           upstream etcd {
-                server 10.0.0.101:2379;
-                server 10.0.0.102:2379;
-                server 10.0.0.103:2379;
+          {% for host in groups['k8s-masters'] %}
+            server {{ host }}:2379;
+          {% endfor %}
           }	
 
           server {
