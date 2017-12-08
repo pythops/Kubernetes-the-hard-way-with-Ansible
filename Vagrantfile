@@ -1,10 +1,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-$script = <<SCRIPT
-apt update
-apt install -y python
-SCRIPT
+#$script = <<SCRIPT
+#apt update
+#apt install -y python
+#SCRIPT
 
 Vagrant.configure("2") do |config|
 
@@ -55,6 +55,6 @@ Vagrant.configure("2") do |config|
   end
   
   config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/home/ubuntu/.ssh/authorized_keys"
-  config.vm.provision "shell", inline: $script
+  #config.vm.provision "shell", inline: $script
 
 end
