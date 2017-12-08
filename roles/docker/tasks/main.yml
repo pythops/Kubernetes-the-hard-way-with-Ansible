@@ -1,16 +1,5 @@
 ---
 
-- name: Install prerequisites packages
-  apt:
-    name: "{{ item }}"
-    update_cache: yes
-    state: present
-  with_items:
-    - apt-transport-https
-    - ca-certificates
-    - python-pip
-    - software-properties-common
-
 - name: Add Docker key
   apt_key:
     url: "{{ docker_key }}"
@@ -20,11 +9,11 @@
   apt_repository:
     repo: "{{ docker_repo }}"
     state: present
+    update_cache: yes
 
 - name: Install Docker
   apt:
     name: docker-ce
-    update_cache: yes
     state: present
 
 - name: copy systemd unit file
