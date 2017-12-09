@@ -22,7 +22,7 @@ $ vagrant up
 
 Deploy k8s cluster
 ```
-$ ansible-playbook -i hosts k8s.yml
+$ ansible-playbook k8s.yml
 ```
 ## Verification
 Check the k8s master's components
