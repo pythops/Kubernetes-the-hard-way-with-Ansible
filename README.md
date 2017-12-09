@@ -46,6 +46,13 @@ k8s-worker3   Ready     <none>    5m        v1.8.0
 
 ```
 
+Check DNS add-on
+```
+kubectl get pod -n kube-system
+NAME                      READY     STATUS    RESTARTS   AGE
+coredns-b8d4b46c8-t2zpf   1/1       Running   0          37m
+```
+
 ## Roadmap
 - [x] PKI
 - [x] Etcd cluster
@@ -53,7 +60,9 @@ k8s-worker3   Ready     <none>    5m        v1.8.0
 - [x] Loadbalancer
 - [x] k8s workers
 - [x] Flannel
-- [ ] kube-dns
+- [x] CoreDNS
+- [ ] Dashboard
+- [ ] Smoke Test
 - [ ] PKI with Ansible openssl module
 
 ## Issues
