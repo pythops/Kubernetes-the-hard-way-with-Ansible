@@ -32,3 +32,8 @@
   become: yes
   roles:
     - k8s-worker
+
+- name: Install add-ons
+  hosts: localhost
+  roles:
+    - addons
