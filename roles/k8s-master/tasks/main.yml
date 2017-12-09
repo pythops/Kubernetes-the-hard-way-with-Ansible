@@ -49,3 +49,9 @@
     - restart k8s-master
   tags:
     - config
+
+- name: Configure RBAC for kubelet authorization
+  run_once: yes
+  local_action: shell kubectl apply -f roles/k8s-master/templates/rbac-conf/rbac.yml
+  become_user: "{{ lookup('env','USER') }}"
+ 
