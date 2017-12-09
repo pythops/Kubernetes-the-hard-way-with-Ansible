@@ -103,7 +103,7 @@ cfssl gencert \
   -ca=$PKI_DIR/ca.pem \
   -ca-key=$PKI_DIR/ca-key.pem \
   -config=$PKI_DIR/ca-config.json \
-  -hostname=10.0.0.100,10.0.0.101,10.0.0.102,10.0.0.103,127.0.0.1,kubernetes.default \
+  -hostname=10.0.0.100,10.0.0.101,10.0.0.102,10.0.0.103,127.0.0.1,10.32.0.1,10.32.0.10,kubernetes.default \
   -profile=kubernetes \
   $PKI_DIR/kubernetes-csr.json | cfssljson -bare $PKI_DIR/k8s-master
 
