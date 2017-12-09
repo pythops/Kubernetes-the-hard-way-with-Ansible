@@ -1,3 +1,6 @@
 .vagrant/*
+bin/*
+conf/*
+pki/*
 ubuntu-xenial-16.04-cloudimg-console.log
 
