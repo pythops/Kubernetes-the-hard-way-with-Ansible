@@ -50,6 +50,8 @@
   tags:
     - config
 
+- meta: flush_handlers
+
 - name: Configure RBAC for kubelet authorization
   run_once: yes
   local_action: shell kubectl apply -f roles/k8s-master/templates/rbac-conf/rbac.yml
