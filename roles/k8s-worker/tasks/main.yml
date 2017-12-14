@@ -4,6 +4,7 @@
   apt:
     name: socat
     state: latest
+    update_cache: yes
 
 - name: Create config directories
   file:
