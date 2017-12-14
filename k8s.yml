@@ -5,6 +5,13 @@
   roles:
     - prerequisites
 
+- name: Deploy loadbalancer
+  hosts: loadbalancer
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - loadbalancer
+
 - name: Deploy Etcd cluster
   hosts: k8s-masters
   remote_user: ubuntu
@@ -18,13 +25,6 @@
   become: yes
   roles:
     - k8s-master
-
-- name: Deploy loadbalancer
-  hosts: loadbalancer
-  remote_user: ubuntu
-  become: yes
-  roles:
-    - loadbalancer
 
 - name: Deploy k8s worker components
   hosts: k8s-workers
