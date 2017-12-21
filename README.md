@@ -48,7 +48,7 @@ k8s-worker3   Ready     <none>    5m        v1.8.0
 
 Check DNS add-on
 ```
-kubectl get pod -n kube-system
+$ kubectl get pod -n kube-system
 NAME                      READY     STATUS    RESTARTS   AGE
 coredns-b8d4b46c8-t2zpf   1/1       Running   0          37m
 ```
