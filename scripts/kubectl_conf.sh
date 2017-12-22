@@ -9,7 +9,7 @@ echo "Generating the configuration for kubectl"
 kubectl config set-cluster kubernetes \
   --certificate-authority=$PKI_DIR/ca.pem \
   --embed-certs=true \
-  --server=https://10.0.0.100:443
+  --server=https://10.0.0.100:6443
 
 kubectl config set-credentials admin \
   --client-certificate=$PKI_DIR/admin.pem \
