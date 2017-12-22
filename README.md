@@ -5,6 +5,7 @@ This is an attempt to automate the creation of k8s cluster proposed in the tutor
 <p align="center">
 <img src="docs/architecture.png" width="550px">
 </p>
+
 ## Prerequisites
 Before you begin, you need to install all these tools:
 - [Ansible](https://www.ansible.com/)
