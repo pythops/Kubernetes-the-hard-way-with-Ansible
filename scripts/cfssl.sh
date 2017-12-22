@@ -177,6 +177,37 @@ cfssl gencert \
   $PKI_DIR/kube-proxy-csr.json | cfssljson -bare $PKI_DIR/kube-proxy
 fi
 
+if [ ! -f $PKI_DIR/dashboard.bundle ]; then
+echo "Generating dashboard certificate"
+
+cat > $PKI_DIR/dashboard-csr.json <<EOF
+{
+  "CN": "k8s-dashboard",
+  "key":{
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "FR",
+      "L": "Paris",
+      "O": "k8s dashboard"
+    }
+  ]
+}
+EOF
+
+cfssl gencert \
+  -ca=$PKI_DIR/ca.pem \
+  -ca-key=$PKI_DIR/ca-key.pem \
+  -config=$PKI_DIR/ca-config.json \
+  -profile=kubernetes \
+  $PKI_DIR/dashboard-csr.json | cfssljson -bare $PKI_DIR/dashboard
+
+cat $PKI_DIR/dashboard.pem $PKI_DIR/dashboard-key.pem > $PKI_DIR/dashboard.bundle
+
+fi
+
 if [ ! -f $PKI_DIR/encryption-config.yml ]; then
 echo "Generating encryption key"
 ENCRYPTION_KEY=$(head -c 32 /dev/urandom | base64)
