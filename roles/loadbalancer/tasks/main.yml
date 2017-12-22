@@ -22,11 +22,6 @@
           }	
 
           server {
-                listen 443;
-                proxy_pass k8s-api;
-          }
-
-          server {
                 listen 6443;
                 proxy_pass k8s-api;
           }
