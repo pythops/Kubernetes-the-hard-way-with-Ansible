@@ -2,3 +2,9 @@
 
 - name: Install CoreDNS add-on
   shell: "kubectl apply -f roles/addons/templates/coredns.yml"
+
+- name: Store Dashboard certificate in a secret
+  shell: "kubectl create secret generic kubernetes-dashboard-certs --from-file=pki/dashboard.bundle -n kube-system"
+
+- name: Install Dashboard
+  shell: "kubectl apply -f roles/addons/templates/kubernetes-dashboard.yml"
