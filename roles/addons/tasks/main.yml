@@ -8,3 +8,6 @@
 
 - name: Install Dashboard
   shell: "kubectl apply -f roles/addons/templates/kubernetes-dashboard.yml"
+
+- name: Granting admin privileges to Dashboard's Service Account
+  shell: "kubectl apply -f roles/addons/templates/dashboard-admin.yml"
