@@ -73,6 +73,12 @@ kubernetes-dashboard   NodePort   10.32.0.63   <none>        443:30585/TCP   23m
 
 The Dashbord is accessible at `https://<Worker-IP>:30585`
 
+To log in, select Token and insert the token given by the following command:
+
+```
+$ kubectl describe serviceaccount kubernetes-dashboard -n kube-system | grep Tokens | awk '{print $2}' | xargs kubectl -n kube-system describe secret  | grep '^token' | awk -F ':' '{print $2}'
+```
+
 ## Roadmap
 - [x] PKI
 - [x] Etcd cluster
