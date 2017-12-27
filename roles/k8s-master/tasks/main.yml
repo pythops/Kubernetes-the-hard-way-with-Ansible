@@ -64,4 +64,8 @@
   run_once: yes
   local_action: shell kubectl apply -f roles/k8s-master/templates/rbac-conf/rbac.yml
   become_user: "{{ lookup('env','USER') }}"
+  register: rbac_conf
+  until: rbac_conf.stderr == ''
+  retries: 3
+  delay: 10
  
