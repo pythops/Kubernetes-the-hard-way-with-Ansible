@@ -1,5 +1,6 @@
-## Introduction
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
+## Introduction
 This is an attempt to automate the creation of k8s cluster proposed in the tutorial [kubernetes-the-hard-way](https://github.com/kelseyhightower/kubernetes-the-hard-way).
 
 <p align="center">
