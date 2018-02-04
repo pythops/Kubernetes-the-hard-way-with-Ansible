@@ -7,6 +7,10 @@ This is an attempt to automate the creation of k8s cluster proposed in the tutor
 <img src="docs/architecture.png" width="550px">
 </p>
 
+## Cluster details
+* Container runtime: **docker**
+* Network plugin: **flannel**
+
 ## Prerequisites
 Before you begin, you need to install all these tools:
 - [Ansible](https://www.ansible.com/)
@@ -41,7 +45,7 @@ etcd-1               Healthy   {"health": "true"}
 
 *Check the k8s workers*
 ```
-kubectl get nodes                                                                                                                                   255 ↵
+kubectl get nodes
 NAME          STATUS    ROLES     AGE       VERSION
 k8s-worker1   Ready     <none>    19s       v1.9.2
 k8s-worker2   Ready     <none>    20s       v1.9.2
