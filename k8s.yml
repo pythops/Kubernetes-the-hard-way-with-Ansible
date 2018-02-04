@@ -7,28 +7,28 @@
 
 - name: Deploy loadbalancer
   hosts: loadbalancer
-  remote_user: ubuntu
+  remote_user: vagrant
   become: yes
   roles:
     - loadbalancer
 
 - name: Deploy Etcd cluster
   hosts: k8s-masters
-  remote_user: ubuntu
+  remote_user: vagrant
   become: yes
   roles:
     - etcd
 
 - name: Deploy k8s master components
   hosts: k8s-masters
-  remote_user: ubuntu
+  remote_user: vagrant
   become: yes
   roles:
     - k8s-master
 
 - name: Deploy k8s worker components
   hosts: k8s-workers
-  remote_user: ubuntu
+  remote_user: vagrant
   become: yes
   roles:
     - k8s-worker
