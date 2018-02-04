@@ -41,17 +41,17 @@ etcd-1               Healthy   {"health": "true"}
 
 *Check the k8s workers*
 ```
-$ kubectl get nodes
+kubectl get nodes                                                                                                                                   255 ↵
 NAME          STATUS    ROLES     AGE       VERSION
-k8s-worker1   Ready     <none>    5m        v1.8.0
-k8s-worker2   Ready     <none>    5m        v1.8.0
-k8s-worker3   Ready     <none>    5m        v1.8.0
+k8s-worker1   Ready     <none>    19s       v1.9.2
+k8s-worker2   Ready     <none>    20s       v1.9.2
+k8s-worker3   Ready     <none>    20s       v1.9.2
 
 ```
 
 *Check DNS add-on*
 ```
-$ kubectl get pod -n kube-system
+$ kubectl get pod -l k8s-app=coredns -n kube-system
 NAME                      READY     STATUS    RESTARTS   AGE
 coredns-b8d4b46c8-t2zpf   1/1       Running   0          37m
 ```
@@ -89,7 +89,7 @@ $ kubectl describe serviceaccount kubernetes-dashboard -n kube-system | grep Tok
 - [x] Flannel
 - [x] CoreDNS
 - [x] Dashboard
-- [ ] Smoke Test
+- [ ] Smoke test
 - [ ] PKI with Ansible openssl module
 
 ## Issues
