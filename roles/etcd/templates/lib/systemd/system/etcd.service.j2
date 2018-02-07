@@ -21,7 +21,7 @@ ExecStart=/usr/local/bin/etcd \
   --listen-client-urls https://{{ inventory_hostname }}:2379,http://127.0.0.1:2379 \
   --advertise-client-urls https://{{ inventory_hostname }}:2379 \
   --initial-cluster-token etcd-cluster-0 \
-  --initial-cluster k8s-master1=https://10.0.0.101:2380,k8s-master2=https://10.0.0.102:2380,k8s-master3=https://10.0.0.103:2380 \
+  --initial-cluster k8s-master1=https://{{ groups['k8s-masters'][0] }}:2380,k8s-master2=https://{{ groups['k8s-masters'][1] }}:2380,k8s-master3=https://{{ groups['k8s-masters'][2] }}:2380 \
   --initial-cluster-state new \
   --data-dir=/var/lib/etcd
 Restart=on-failure
