@@ -55,6 +55,8 @@ Vagrant.configure("2") do |config|
   	worker3.vm.network "private_network", ip: "10.0.0.112"
   end
   
-  config.vm.provision "file", source: "~/.ssh/id_rsa.pub", destination: "/home/vagrant/.ssh/authorized_keys"
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "ssh.yml"
+  end
 
 end
