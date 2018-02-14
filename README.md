@@ -8,8 +8,9 @@ This is an attempt to automate the creation of k8s cluster proposed in the tutor
 </p>
 
 ## Cluster details
-* Container runtime: **docker**
-* Network plugin: **flannel**
+* Container runtime: [Docker](https://www.docker.com/)
+* Network plugin: [Flannel](https://github.com/coreos/flannel)
+* DNS plugin: [CoreDNS](https://github.com/coredns/coredns)
 
 ## Prerequisites
 Before you begin, you need to install all these tools:
@@ -71,7 +72,7 @@ kubernetes-dashboard-7c5d596d8c-vp85k   1/1       Running   0          8m
 
 Get the port on which the dashbord is exposed
 ```
-$ kubectl -n kube-system get service kubernetes-dashboard                                                                                               1 ↵
+$ kubectl -n kube-system get service kubernetes-dashboard
 NAME                   TYPE       CLUSTER-IP   EXTERNAL-IP   PORT(S)         AGE
 kubernetes-dashboard   NodePort   10.32.0.63   <none>        443:30585/TCP   23m
 ```
