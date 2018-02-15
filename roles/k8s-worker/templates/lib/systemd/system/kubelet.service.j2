@@ -17,7 +17,6 @@ ExecStart=/usr/local/bin/kubelet \
   --kubeconfig=/var/lib/kubelet/{{ ansible_hostname }}.kubeconfig \
   --node-ip={{ hostvars[inventory_hostname]['ansible_enp0s8']['ipv4']['address'] }} \
   --register-node=true \
-  --require-kubeconfig \
   --tls-cert-file=/var/lib/kubelet/{{ ansible_hostname }}.pem \
   --tls-private-key-file=/var/lib/kubelet/{{ ansible_hostname }}-key.pem \
   --v=2
