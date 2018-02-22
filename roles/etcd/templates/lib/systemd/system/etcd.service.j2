@@ -6,6 +6,8 @@ Documentation=https://github.com/coreos
 
 [Service]
 Type=notify
+User=etcd
+Group=etcd
 ExecStart=/usr/local/bin/etcd \
   --name  {{ ansible_hostname }} \
   --cert-file=/etc/etcd/k8s-master.pem \
@@ -26,6 +28,17 @@ ExecStart=/usr/local/bin/etcd \
   --data-dir=/var/lib/etcd
 Restart=on-failure
 RestartSec=5
+ProtectSystem=full
+ReadWritePaths=/var/lib/etcd 
+PrivateTmp=true
+ProtectHome=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+NoNewPrivileges=true
+LimitNOFILE=40000
+
 
 [Install]
 WantedBy=multi-user.target
