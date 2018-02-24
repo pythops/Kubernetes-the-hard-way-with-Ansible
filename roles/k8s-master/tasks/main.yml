@@ -14,7 +14,7 @@
     dest: /usr/local/bin/
     owner: root
     group: root
-    mode: 0554
+    mode: 0755
   with_items:
     - ../../bin/kube-apiserver
     - ../../bin/kube-controller-manager
@@ -27,6 +27,15 @@
     owner: root
     group: root
     mode: 0755
+
+- name: Create k8s user
+  user:
+    name: k8s
+    shell: /usr/sbin/nologin
+    comment: "k8s user"
+    createhome: no
+    system: yes
+    state: present
 
 - name: Copy certificates and keys
   copy:

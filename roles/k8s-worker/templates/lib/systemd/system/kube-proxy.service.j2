@@ -12,6 +12,13 @@ ExecStart=/usr/local/bin/kube-proxy \
   --v=2
 Restart=on-failure
 RestartSec=5
+ProtectSystem=full
+PrivateTmp=true
+ProtectHome=true
+PrivateDevices=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target
