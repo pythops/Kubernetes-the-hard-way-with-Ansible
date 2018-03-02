@@ -16,6 +16,15 @@
     group: root
     mode: 0755
 
+- name: Create etcd user
+  user: 
+    name: etcd
+    shell: /usr/sbin/nologin
+    comment: "etcd user"
+    createhome: no
+    system: yes
+    state: present
+
 - name: Create /var/lib/etcd directory
   file:
     path: /var/lib/etcd
@@ -35,15 +44,6 @@
     - ../../pki/ca.pem
     - ../../pki/k8s-master-key.pem
     - ../../pki/k8s-master.pem
-
-- name: Create etcd user
-  user: 
-    name: etcd
-    shell: /usr/sbin/nologin
-    comment: "etcd user"
-    createhome: no
-    system: yes
-    state: present
 
 - name: Copy systemd unit file
   template:
