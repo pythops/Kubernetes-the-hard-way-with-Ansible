@@ -46,7 +46,7 @@ etcd-1               Healthy   {"health": "true"}
 
 *Check the k8s workers*
 ```
-kubectl get nodes
+$ kubectl get nodes
 NAME          STATUS    ROLES     AGE       VERSION
 k8s-worker1   Ready     <none>    19s       v1.9.3
 k8s-worker2   Ready     <none>    20s       v1.9.3
@@ -94,6 +94,7 @@ $ kubectl describe serviceaccount kubernetes-dashboard -n kube-system | grep Tok
 - [x] Flannel
 - [x] CoreDNS
 - [x] Dashboard
+- [ ] Monitoring stack
 - [ ] Smoke test
 - [ ] PKI with Ansible openssl module
 
