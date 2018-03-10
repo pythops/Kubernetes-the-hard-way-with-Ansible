@@ -1,40 +1,23 @@
 ---
 
-- name: Copy flannel and etcdctl binaries
+- name: Copy flanneld binary
   copy:
-    src: "{{ item }}"
+    src: "../../bin/flanneld"
     dest: "/usr/local/bin/"
     owner: root
     group: root
     mode: 0755
-  with_items:
-    - ../../bin/flanneld
-    - ../../bin/etcdctl
 
-- name: Create flannel config dir
-  file:
-    path: /etc/flannel
-    state: directory
-    owner: root
-    group: root
-    mode: 0644
-
-- name: Copy etcd flannel config file
-  template:
-    src: "etc/flannel/config"
-    dest: "/etc/flannel/config"
-    owner: root
-    group: root
-    mode: 0644
-
-- name: Set network configuration on Etcd
-  shell: "etcdctl --endpoints https://10.0.0.100:2379 --ca-file /var/lib/kubernetes/ca.pem --cert-file /var/lib/kubelet/{{ ansible_hostname }}.pem --key-file /var/lib/kubelet/{{ ansible_hostname }}-key.pem mkdir /kubernetes-cluster/network"
-  register: etcd_mkdir
-  failed_when: "'Key already exists' | regex_search('(etcd_mkdir.stderr)') "
-  run_once: true
-
-- name: Set the configuration
-  shell: 'etcdctl --endpoints https://10.0.0.100:2379 --ca-file /var/lib/kubernetes/ca.pem --cert-file /var/lib/kubelet/{{ ansible_hostname }}.pem --key-file /var/lib/kubelet/{{ ansible_hostname }}-key.pem set /kubernetes-cluster/network/config < /etc/flannel/config '
+- name: Set flannel network conf on etcd
+  uri:
+    client_cert:  /var/lib/kubelet/{{ ansible_hostname }}.pem
+    client_key: /var/lib/kubelet/{{ ansible_hostname }}-key.pem
+    validate_certs: no
+    url: https://10.0.0.100:2379/v2/keys/kubernetes-cluster/network/config
+    body: "value={{ ETCD_NET_CONFIG }}"
+    status_code: 200,201
+    method: PUT
+    return_content: yes
   run_once: true
 
 - name: Copy flannel systemd unit file

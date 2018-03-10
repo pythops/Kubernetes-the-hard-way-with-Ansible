@@ -1,5 +1,4 @@
-ETCD_NET_CONFIG: |
-  {% raw %}
+ETCD_NET_CONFIG: >
   {
     "Network": "10.200.0.0/16", 
     "SubnetLen": 24, 
@@ -8,4 +7,3 @@ ETCD_NET_CONFIG: |
        "VNI": 1
     }
   }
-  {% endraw %}
