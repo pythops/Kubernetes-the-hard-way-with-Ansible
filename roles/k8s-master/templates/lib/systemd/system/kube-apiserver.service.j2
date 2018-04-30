@@ -5,8 +5,6 @@ Description=Kubernetes API Server
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 
 [Service]
-User=k8s
-Group=k8s
 Type=notify
 ExecStart=/usr/local/bin/kube-apiserver \
   --admission-control=Initializers,NamespaceLifecycle,NodeRestriction,LimitRanger,ServiceAccount,DefaultStorageClass,ResourceQuota \
@@ -42,14 +40,6 @@ ExecStart=/usr/local/bin/kube-apiserver \
   --v=2
 Restart=on-failure
 RestartSec=5
-ProtectSystem=full
-PrivateTmp=true
-ProtectHome=true
-PrivateDevices=true
-ProtectKernelTunables=true
-ProtectKernelModules=true
-ProtectControlGroups=true
-NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target

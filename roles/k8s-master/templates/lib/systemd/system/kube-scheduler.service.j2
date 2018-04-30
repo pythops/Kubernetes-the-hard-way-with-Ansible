@@ -5,22 +5,12 @@ Description=Kubernetes Scheduler
 Documentation=https://github.com/GoogleCloudPlatform/kubernetes
 
 [Service]
-User=k8s
-Group=k8s
 ExecStart=/usr/local/bin/kube-scheduler \
   --leader-elect=true \
   --master=http://127.0.0.1:8080 \
   --v=2
 Restart=on-failure
 RestartSec=5
-ProtectSystem=full
-PrivateTmp=true
-ProtectHome=true
-PrivateDevices=true
-ProtectKernelTunables=true
-ProtectKernelModules=true
-ProtectControlGroups=true
-NoNewPrivileges=true
 
 [Install]
 WantedBy=multi-user.target
