@@ -3,7 +3,8 @@
 - name: Install nginx
   apt:
     name: nginx
-    state: present
+    state: latest
+    update_cache: yes
 
 - name: Configure nginx
   blockinfile:
