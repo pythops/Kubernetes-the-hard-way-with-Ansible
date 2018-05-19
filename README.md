@@ -98,11 +98,5 @@ $ kubectl describe serviceaccount kubernetes-dashboard -n kube-system | grep Tok
 - [ ] Smoke test
 - [ ] PKI with Ansible openssl module
 
-## Issues
-* Flannel: Can not use API server to set the network configuration.
-https://github.com/coreos/flannel/issues/792
-* Ansible openssl: Does not support CA certificate option.
-https://docs.ansible.com/ansible/2.4/openssl_csr_module.html
-
 ## License
 The source code in this repo is licenced under the GPL 3
