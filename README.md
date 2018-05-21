@@ -8,6 +8,7 @@ This is an attempt to automate the creation of k8s cluster proposed in the tutor
 </p>
 
 ## Cluster details
+* k8s version: **1.10.2**
 * Container runtime: [Docker](https://www.docker.com/)
 * Network plugin: [Flannel](https://github.com/coreos/flannel)
 * DNS plugin: [CoreDNS](https://github.com/coredns/coredns)
@@ -48,9 +49,9 @@ etcd-1               Healthy   {"health": "true"}
 ```
 $ kubectl get nodes
 NAME          STATUS    ROLES     AGE       VERSION
-k8s-worker1   Ready     <none>    19s       v1.9.3
-k8s-worker2   Ready     <none>    20s       v1.9.3
-k8s-worker3   Ready     <none>    20s       v1.9.3
+k8s-worker1   Ready     <none>    19s       v1.10.2
+k8s-worker2   Ready     <none>    20s       v1.10.2
+k8s-worker3   Ready     <none>    20s       v1.10.2
 
 ```
 
