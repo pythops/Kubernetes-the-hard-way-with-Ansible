@@ -5,6 +5,8 @@
 
 - name: Store Dashboard certificate in a secret
   shell: "kubectl create secret generic kubernetes-dashboard-certs --from-file=pki/dashboard.bundle -n kube-system"
+  register: create_secret
+  failed_when: "'already exists' not in create_secret.stderr"
 
 - name: Install Dashboard
   shell: "kubectl apply -f roles/addons/templates/kubernetes-dashboard.yml"
