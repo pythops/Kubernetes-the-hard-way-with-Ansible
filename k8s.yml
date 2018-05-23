@@ -37,3 +37,8 @@
   hosts: localhost
   roles:
     - addons
+
+- name: Setup the monitoring stack
+  hosts: localhost
+  roles:
+    - k8s-monitoring

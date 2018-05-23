@@ -86,6 +86,27 @@ To log in, select Token and insert the token given by the following command:
 $ kubectl describe serviceaccount kubernetes-dashboard -n kube-system | grep Tokens | awk '{print $2}' | xargs kubectl -n kube-system describe secret  | grep '^token' | awk -F ':' '{print $2}'
 ```
 
+*Check the monitoring pods*
+```
+$ kubectl get pods  -l task=monitoring --all-namespaces
+NAMESPACE     NAME                                   READY     STATUS    RESTARTS   AGE
+kube-system   heapster-69b5d4974d-kxgjw              1/1       Running   0          2m
+kube-system   monitoring-grafana-69df66f668-m59hp    1/1       Running   0          2m
+kube-system   monitoring-influxdb-78d4c6f5b6-gh56w   1/1       Running   0          2m
+```
+
+*Access Grafana*
+
+Get the port on which grafana is exposed:
+```
+kubectl -n kube-system get service monitoring-grafana  
+NAME                 TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
+monitoring-grafana   NodePort   10.32.0.238   <none>        80:31244/TCP   7m
+```
+
+the dashboard is accessible at `http://<Worker-IP>:31244`
+
+
 ## Roadmap
 - [x] PKI
 - [x] Etcd cluster
@@ -95,7 +116,7 @@ $ kubectl describe serviceaccount kubernetes-dashboard -n kube-system | grep Tok
 - [x] Flannel
 - [x] CoreDNS
 - [x] Dashboard
-- [ ] Monitoring stack
+- [x] Monitoring stack
 - [ ] Smoke test
 - [ ] PKI with Ansible openssl module
 

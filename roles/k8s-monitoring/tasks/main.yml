@@ -1,0 +1,13 @@
+---
+
+- name: Setup heapster
+  shell: "kubectl create -f roles/k8s-monitoring/templates/heapster.yml"
+
+- name: Setup influxdb
+  shell: "kubectl create -f roles/k8s-monitoring/templates/influxdb.yml"
+
+- name: Setup grafna
+  shell: "kubectl create -f roles/k8s-monitoring/templates/grafana.yml"
+
+- name: Setup heapster rbac
+  shell: "kubectl create -f roles/k8s-monitoring/templates/heapster-rbac.yml"
