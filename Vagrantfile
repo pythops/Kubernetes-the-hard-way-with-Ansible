@@ -1,11 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-#$script = <<SCRIPT
-#apt update
-#apt install -y python
-#SCRIPT
-
 Vagrant.configure("2") do |config|
 
   config.vm.box = "ubuntu/xenial64"
