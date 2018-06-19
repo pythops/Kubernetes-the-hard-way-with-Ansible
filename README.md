@@ -12,6 +12,7 @@ This is an attempt to automate the creation of k8s cluster proposed in the tutor
 * Container runtime: [Docker](https://www.docker.com/)
 * Network plugin: [Flannel](https://github.com/coreos/flannel)
 * DNS plugin: [CoreDNS](https://github.com/coredns/coredns)
+* [gVisor](https://github.com/google/gvisor) supported.
 
 ## Prerequisites
 Before you begin, you need to install all these tools:
@@ -24,7 +25,7 @@ Before you begin, you need to install all these tools:
 You need also to have at least 4 GB of free memory.
 ## How to use
 
-Bootstrap the VMs with Vagrant
+Create the VMs with Vagrant
 ```
 $ vagrant up
 ```
@@ -99,26 +100,12 @@ kube-system   monitoring-influxdb-78d4c6f5b6-gh56w   1/1       Running   0      
 
 Get the port on which grafana is exposed:
 ```
-kubectl -n kube-system get service monitoring-grafana  
+$ kubectl -n kube-system get service monitoring-grafana  
 NAME                 TYPE       CLUSTER-IP    EXTERNAL-IP   PORT(S)        AGE
 monitoring-grafana   NodePort   10.32.0.238   <none>        80:31244/TCP   7m
 ```
 
 the dashboard is accessible at `http://<Worker-IP>:31244`
-
-
-## Roadmap
-- [x] PKI
-- [x] Etcd cluster
-- [x] k8s masters
-- [x] Loadbalancer
-- [x] k8s workers
-- [x] Flannel
-- [x] CoreDNS
-- [x] Dashboard
-- [x] Monitoring stack
-- [ ] Smoke test
-- [ ] PKI with Ansible openssl module
 
 ## License
 The source code in this repo is licenced under the GPL 3
