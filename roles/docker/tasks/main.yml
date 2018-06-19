@@ -28,4 +28,29 @@
   tags: 
     - config
 
+- name: Download gvisor
+  get_url:
+    url: https://storage.googleapis.com/gvisor/releases/nightly/latest/runsc
+    dest: /usr/local/bin/
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Configure gvisor for docker
+  copy:
+    content: |
+            {
+               "runtimes": {
+                 "runsc": {
+                   "path": "/usr/local/bin/runsc"
+                 }
+               }
+            }
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart docker
+
 - meta: flush_handlers
