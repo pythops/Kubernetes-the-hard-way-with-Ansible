@@ -1,0 +1,12 @@
+CLUSETER_IP: 10.32.0.0/24
+
+APISERVER_SERVICE_IP: 10.32.0.1 
+
+# PKI directory
+PKI_DIR: '{{ playbook_dir }}/pki'
+
+# Kubeconfig directory
+CONF_DIR: '{{ playbook_dir }}/kubeconfig'
+
+# Binaries directory
+BIN_DIR: '{{ playbook_dir }}/bin'
