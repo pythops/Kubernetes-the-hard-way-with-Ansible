@@ -2,7 +2,7 @@
 
 - name: Copy etcd binaries 
   copy:
-    src: ../../bin/etcd
+    src: '{{ BIN_DIR }}/etcd'
     dest: /usr/local/bin/
     owner: root
     group: root
@@ -40,10 +40,10 @@
     owner: root
     group: root
     mode: 0644
-  with_items:
-    - ../../pki/ca.pem
-    - ../../pki/k8s-master-key.pem
-    - ../../pki/k8s-master.pem
+  loop:
+    - '{{ PKI_DIR }}/ca.pem'
+    - '{{ PKI_DIR }}/k8s-master-key.pem'
+    - '{{ PKI_DIR }}/k8s-master.pem'
 
 - name: Copy systemd unit file
   template:

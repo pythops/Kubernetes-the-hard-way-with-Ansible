@@ -2,7 +2,7 @@
 
 - name: Copy flanneld binary
   copy:
-    src: "../../bin/flanneld"
+    src: "{{ BIN_DIR }}/flanneld"
     dest: "/usr/local/bin/"
     owner: root
     group: root

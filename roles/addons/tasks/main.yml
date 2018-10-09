@@ -4,7 +4,7 @@
   shell: "kubectl apply -f roles/addons/templates/coredns.yml"
 
 - name: Store Dashboard certificate in a secret
-  shell: "kubectl create secret generic kubernetes-dashboard-certs --from-file=pki/dashboard.bundle -n kube-system"
+  shell: "kubectl create secret generic kubernetes-dashboard-certs --from-file={{ PKI_DIR }}/k8s-dashboard.bundle -n kube-system"
   register: create_secret
   failed_when: "'already exists' not in create_secret.stderr"
 

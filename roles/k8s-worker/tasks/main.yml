@@ -26,8 +26,8 @@
     group: root
     mode: 0554
   with_items:
-    - ../../bin/kubelet
-    - ../../bin/kube-proxy
+    - '{{ BIN_DIR }}/kubelet'
+    - '{{ BIN_DIR }}/kube-proxy'
 
 - name: Copy certificates and config files
   copy:
@@ -37,11 +37,11 @@
     group: root
     mode: 0644
   with_items:
-    - { src: "../../pki/{{ ansible_hostname }}.pem"         , dest: "/var/lib/kubelet/" }
-    - { src: "../../pki/{{ ansible_hostname }}-key.pem"     , dest: "/var/lib/kubelet/" }
-    - { src: "../../conf/{{ ansible_hostname }}.kubeconfig" , dest: "/var/lib/kubelet/" }
-    - { src: "../../pki/ca.pem"                             , dest: "/var/lib/kubernetes/" }
-    - { src: "../../conf/kube-proxy.kubeconfig"             , dest: "/var/lib/kube-proxy/kubeconfig"}
+    - { src: "{{ PKI_DIR }}/ca.pem"                             , dest: "/var/lib/kubernetes/" }
+    - { src: "{{ PKI_DIR }}/{{ ansible_hostname }}.pem"         , dest: "/var/lib/kubelet/" }
+    - { src: "{{ PKI_DIR }}/{{ ansible_hostname }}-key.pem"     , dest: "/var/lib/kubelet/" }
+    - { src: "{{ CONF_DIR }}/{{ ansible_hostname }}.kubeconfig" , dest: "/var/lib/kubelet/" }
+    - { src: "{{ CONF_DIR }}/kube-proxy.kubeconfig"             , dest: "/var/lib/kube-proxy/kubeconfig"}
 
 - name: Include docker role
   include_role:

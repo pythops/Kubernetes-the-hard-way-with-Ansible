@@ -15,10 +15,10 @@
     owner: root
     group: root
     mode: 0554
-  with_items:
-    - ../../bin/kube-apiserver
-    - ../../bin/kube-controller-manager
-    - ../../bin/kube-scheduler
+  loop:
+    - '{{ BIN_DIR }}/kube-apiserver'
+    - '{{ BIN_DIR }}/kube-controller-manager'
+    - '{{ BIN_DIR }}/kube-scheduler'
 
 - name: Create config directory
   file:
@@ -35,12 +35,12 @@
     owner: root
     group: root
     mode: 0644
-  with_items:
-    - ../../pki/ca.pem
-    - ../../pki/ca-key.pem
-    - ../../pki/k8s-master.pem
-    - ../../pki/k8s-master-key.pem
-    - ../../pki/encryption-config.yml
+  loop:
+    - '{{ PKI_DIR }}/ca.pem'
+    - '{{ PKI_DIR }}/ca-key.pem'
+    - '{{ PKI_DIR }}/k8s-master.pem'
+    - '{{ PKI_DIR }}/k8s-master-key.pem'
+    - '{{ PKI_DIR }}/encryption-config.yml'
 
 - name: Copy systemd unit file
   template:
