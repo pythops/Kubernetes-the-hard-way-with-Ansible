@@ -17,7 +17,6 @@ This is an attempt to automate the creation of k8s cluster proposed in the tutor
 ## Prerequisites
 Before you begin, you need to install all these tools:
 - [Ansible](https://www.ansible.com/)
-- [cfssl](https://github.com/cloudflare/cfssl)
 - [Vagrant](https://www.vagrantup.com/)
 - [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
