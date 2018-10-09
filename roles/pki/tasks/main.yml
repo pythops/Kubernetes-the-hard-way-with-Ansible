@@ -1,0 +1,175 @@
+- name: Create PKI directory
+  file:
+    path: '{{ PKI_DIR }}'
+    state: directory
+
+- name: Generate CA private key
+  openssl_privatekey:
+    path: '{{ PKI_DIR }}/ca-key.pem'
+
+- name: Generate CA CSR
+  openssl_csr:
+    path: '{{ PKI_DIR }}/ca.csr'
+    privatekey_path: '{{ PKI_DIR }}/ca-key.pem'
+    basic_constraints: "CA:TRUE"
+    basic_constraints_critical: True
+    key_usage: cRLSign, keyCertSign
+    key_usage_critical: True
+    organizational_unit_name: 'k8s the hard way'
+    common_name: k8s-CA
+
+- name: Generate CA certificate
+  openssl_certificate:
+    path: '{{ PKI_DIR }}/ca.pem'
+    privatekey_path: '{{ PKI_DIR }}/ca-key.pem'
+    csr_path: '{{ PKI_DIR }}/ca.csr'
+    provider: selfsigned
+
+- name: Generate Admin private key
+  openssl_privatekey:
+    path: '{{ PKI_DIR }}/admin-key.pem'
+
+- name: Generate Admin CSR
+  openssl_csr:
+    path: '{{ PKI_DIR }}/admin.csr'
+    privatekey_path: '{{ PKI_DIR }}/admin-key.pem'
+    basic_constraints: "CA:FALSE"
+    basic_constraints_critical: True
+    key_usage: digitalSignature, keyEncipherment
+    key_usage_critical: True
+    extended_key_usage: serverAuth, clientAuth
+    common_name: k8s-admin
+    organization_name: "system:masters"
+    organizational_unit_name: k8s the hard way
+
+- name: Generate Admin certificate
+  openssl_certificate:
+    path: '{{ PKI_DIR }}/admin.pem'
+    csr_path: '{{ PKI_DIR }}/admin.csr'
+    ownca_path: '{{ PKI_DIR }}/ca.pem'
+    ownca_privatekey_path: '{{ PKI_DIR }}/ca-key.pem'
+    provider: ownca
+
+- name: Generate Masters private key
+  openssl_privatekey:
+    path: '{{ PKI_DIR }}/k8s-master-key.pem'
+
+- name: Generate Masters CSR
+  openssl_csr:
+    path: '{{ PKI_DIR }}/k8s-master.csr'
+    privatekey_path: '{{ PKI_DIR }}/k8s-master-key.pem'
+    common_name: 'k8s-master'
+    basic_constraints: "CA:FALSE"
+    basic_constraints_critical: True
+    key_usage: digitalSignature, keyEncipherment
+    key_usage_critical: True
+    extended_key_usage: serverAuth, clientAuth
+    organization_name: 'system:masters'
+    organizational_unit_name: 'k8s the hard way'
+    subject_alt_name: "DNS:kubernetes.default, IP:{{ groups['k8s-masters'][0] }}, IP:{{ groups['k8s-masters'][1] }}, IP:{{ groups['k8s-masters'][2] }}, IP:{{ groups['loadbalancer'][0] }}, IP:127.0.0.1, IP:{{ APISERVER_SERVICE_IP }}"
+
+- name: Generate Masters certificate
+  openssl_certificate:
+    path: '{{ PKI_DIR }}/k8s-master.pem'
+    csr_path: '{{ PKI_DIR }}/k8s-master.csr'
+    ownca_path: '{{ PKI_DIR }}/ca.pem'
+    ownca_privatekey_path: '{{ PKI_DIR }}/ca-key.pem'
+    provider: ownca
+
+- name: Generate Workers private keys
+  openssl_privatekey:
+    path: '{{ PKI_DIR }}/{{ item }}-key.pem'
+  loop: 
+    - k8s-worker1
+    - k8s-worker2
+    - k8s-worker3
+
+- name: Generate Workers CSRs
+  openssl_csr:
+    path: '{{ PKI_DIR }}/{{ item[0] }}.csr'
+    privatekey_path: '{{ PKI_DIR }}/{{ item[0] }}-key.pem'
+    common_name: 'system:node:{{ item[0] }}'
+    basic_constraints: "CA:FALSE"
+    basic_constraints_critical: True
+    key_usage: digitalSignature, keyEncipherment
+    key_usage_critical: True
+    extended_key_usage: serverAuth, clientAuth
+    organization_name: 'system:nodes'
+    organizational_unit_name: 'k8s the hard way'
+    subject_alt_name: 'DNS:{{ item[0] }}, IP:{{ item[1] }}'
+  loop:
+    - ["k8s-worker1", "{{ groups['k8s-workers'][0] }}" ]
+    - ["k8s-worker2", "{{ groups['k8s-workers'][1] }}" ]
+    - ["k8s-worker3", "{{ groups['k8s-workers'][2] }}" ]
+
+- name: Generate Workers certificates
+  openssl_certificate:
+    path: '{{ PKI_DIR }}/{{ item }}.pem'
+    csr_path: '{{ PKI_DIR }}/{{ item }}.csr'
+    ownca_path: '{{ PKI_DIR }}/ca.pem'
+    ownca_privatekey_path: '{{ PKI_DIR }}/ca-key.pem'
+    provider: ownca
+  loop:
+    - k8s-worker1
+    - k8s-worker2
+    - k8s-worker3
+
+- name: Generating Kube Proxy private key
+  openssl_privatekey:
+    path: '{{ PKI_DIR }}/kube-proxy-key.pem'
+
+- name: Generate Kube Proxy CSR
+  openssl_csr:
+    path: '{{ PKI_DIR }}/kube-proxy.csr'
+    privatekey_path: '{{ PKI_DIR }}/kube-proxy-key.pem'
+    basic_constraints: "CA:FALSE"
+    basic_constraints_critical: True
+    key_usage: digitalSignature, keyEncipherment
+    key_usage_critical: True
+    extended_key_usage: serverAuth, clientAuth
+    common_name: 'system:kube-proxy'
+    organization_name: 'system:node-proxier'
+    organizational_unit_name: 'k8s the hard way'
+ 
+- name: Generate Kube Proxy certificate
+  openssl_certificate:
+    path: '{{ PKI_DIR }}/kube-proxy.pem'
+    csr_path: '{{ PKI_DIR }}/kube-proxy.csr'
+    ownca_path: '{{ PKI_DIR }}/ca.pem'
+    ownca_privatekey_path: '{{ PKI_DIR }}/ca-key.pem'
+    provider: ownca
+
+- name: Generate k8s Dashboard private key
+  openssl_privatekey:
+    path: '{{ PKI_DIR }}/k8s-dashboard-key.pem'
+
+- name: Generate k8s Dashboard CSR
+  openssl_csr:
+    path: '{{ PKI_DIR }}/k8s-dashboard.csr'
+    privatekey_path: '{{ PKI_DIR }}/k8s-dashboard-key.pem'
+    basic_constraints: "CA:FALSE"
+    basic_constraints_critical: True
+    key_usage: digitalSignature, keyEncipherment
+    key_usage_critical: True
+    extended_key_usage: serverAuth, clientAuth
+    common_name: 'k8s-Dashboard'
+    organization_name: 'addons:Dashboard'
+    organizational_unit_name: 'k8s the hard way'
+
+- name: Generate k8s Dashboard certificate
+  openssl_certificate:
+    path: '{{ PKI_DIR }}/k8s-dashboard.pem'
+    csr_path: '{{ PKI_DIR }}/k8s-dashboard.csr'
+    ownca_path: '{{ PKI_DIR }}/ca.pem'
+    ownca_privatekey_path: '{{ PKI_DIR }}/ca-key.pem'
+    provider: ownca
+
+- name: Generate k8s-dashboard bundle
+  shell: "cat {{ PKI_DIR }}/k8s-dashboard.pem {{ PKI_DIR }}/k8s-dashboard-key.pem > {{ PKI_DIR }}/k8s-dashboard.bundle"
+  args:
+    creates: '{{ PKI_DIR }}/k8s-dashboard.bundle'
+
+- name: Generate encryption-config.yml
+  shell: echo "{{ encryption_config }}" > {{ PKI_DIR }}/encryption-config.yml
+  args:
+    creates: '{{ PKI_DIR }}/encryption-config.yml'
