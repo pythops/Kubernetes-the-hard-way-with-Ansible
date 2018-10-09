@@ -1,9 +1,20 @@
----
-
-- name: Generate Certificates and config files
+- name: Create the PKI
   hosts: localhost
+  connection: local
   roles:
-    - prerequisites
+    - pki
+
+- name: Generate the Kubeconfig files
+  hosts: localhost
+  connection: local
+  roles:
+    - kubeconfig
+
+- name: Download the k8s components
+  hosts: localhost
+  connection: local
+  roles:
+    - k8s-download
 
 - name: Deploy loadbalancer
   hosts: loadbalancer
