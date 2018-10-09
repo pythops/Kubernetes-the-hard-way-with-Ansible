@@ -1,0 +1,71 @@
+- name: Create kubeconfig directory
+  file:
+    path: '{{ CONF_DIR }}'
+    state: directory
+
+- name: Generate kubeconfig file for Admin
+  shell: |
+    kubectl config set-cluster k8s-the-hard-way \
+      --certificate-authority={{ PKI_DIR }}/ca.pem \
+      --embed-certs=true \
+      --server=https://{{ groups['loadbalancer'][0] }}:6443
+
+    kubectl config set-credentials admin \
+      --client-certificate={{ PKI_DIR }}/admin.pem \
+      --client-key={{ PKI_DIR }}/admin-key.pem
+
+    kubectl config set-context k8s-the-hard-way \
+      --cluster=k8s-the-hard-way \
+      --user=admin
+
+    kubectl config use-context k8s-the-hard-way
+
+- name: Configure kubeconf files for Kubelet
+  shell: |
+    kubectl config set-cluster k8s-the-hard-way \
+      --certificate-authority={{ PKI_DIR }}/ca.pem \
+      --embed-certs=true \
+      --server=https://{{ groups['loadbalancer'][0] }}:6443 \
+      --kubeconfig={{ CONF_DIR }}/{{ item }}.kubeconfig
+   
+    kubectl config set-credentials system:node:{{ item }} \
+      --client-certificate={{ PKI_DIR }}/{{ item }}.pem \
+      --client-key={{ PKI_DIR }}/{{ item }}-key.pem \
+      --embed-certs=true \
+      --kubeconfig={{ CONF_DIR }}/{{ item }}.kubeconfig
+
+    kubectl config set-context default \
+      --cluster=k8s-the-hard-way \
+      --user=system:node:{{ item }} \
+      --kubeconfig={{ CONF_DIR }}/{{ item }}.kubeconfig 
+
+    kubectl config use-context default --kubeconfig={{ CONF_DIR }}/{{ item }}.kubeconfig
+  args:
+    creates: '{{ CONF_DIR }}/{{ item }}.kubeconfig'
+  loop:
+    - k8s-worker1
+    - k8s-worker2
+    - k8s-worker3
+
+- name: Generate kubeconf files for Kube-Proxy
+  shell: |
+    kubectl config set-cluster k8s-the-hard-way \
+       --certificate-authority={{ PKI_DIR }}/ca.pem \
+       --embed-certs=true \
+       --server=https://{{ groups['loadbalancer'][0] }}:6443 \
+       --kubeconfig={{ CONF_DIR }}/kube-proxy.kubeconfig
+
+    kubectl config set-credentials kube-proxy \
+      --client-certificate={{ PKI_DIR }}/kube-proxy.pem \
+      --client-key={{ PKI_DIR }}/kube-proxy-key.pem \
+      --embed-certs=true \
+      --kubeconfig={{ CONF_DIR }}/kube-proxy.kubeconfig
+
+    kubectl config set-context default \
+      --cluster=k8s-the-hard-way \
+      --user=kube-proxy \
+      --kubeconfig={{ CONF_DIR }}/kube-proxy.kubeconfig
+
+    kubectl config use-context default --kubeconfig={{ CONF_DIR }}/kube-proxy.kubeconfig
+  args:
+    creates: '{{ CONF_DIR }}/kube-proxy.kubeconfig'
