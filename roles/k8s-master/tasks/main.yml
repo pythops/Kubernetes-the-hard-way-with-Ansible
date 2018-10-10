@@ -1,5 +1,3 @@
----
-
 - name: Add workers IPs to /etc/hosts
   blockinfile:
     path: /etc/hosts

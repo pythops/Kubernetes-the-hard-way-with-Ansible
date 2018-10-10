@@ -1,5 +1,3 @@
----
-
 - name: Setup heapster
   shell: "kubectl create -f roles/k8s-monitoring/templates/heapster.yml"
 
